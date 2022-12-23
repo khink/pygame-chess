@@ -23,6 +23,8 @@ class BoardScreen:
     dark_pawn = pygame.image.load("images/p.png")
     light_queen = pygame.image.load("images/P.png")
 
+    move_target_image = pygame.image.load("images/move-target.png")
+
     def get_piece_image(self, piece_code):
         piece_name = {
             "b": "dark_bishop",
@@ -43,10 +45,12 @@ class BoardScreen:
     def __init__(self, board, screen):
         self.board = board
         self.screen = screen
+        self.square_to_move = None
 
     def render(self):
         self.draw_board()
         self.draw_pieces()
+        self.draw_possible_moves()
         pygame.display.flip()
 
     def draw_board(self):
@@ -83,3 +87,29 @@ class BoardScreen:
                 board_file * self.square_size, board_rank * self.square_size
             )
             self.screen.blit(piece_image, rect)
+
+    def draw_possible_moves(self):
+        """Draw the possible moves on the board if a piece was selected."""
+        if not self.square_to_move:
+            return
+
+        board_rank, board_file = self.square_to_move
+
+        for target_board_rank, target_board_file in self.board.get_valid_moves(
+            board_rank, board_file
+        ):
+            move_target_rect = self.move_target_image.get_rect().move(
+                target_board_file * self.square_size,
+                target_board_rank * self.square_size,
+            )
+
+            self.screen.blit(self.move_target_image, move_target_rect)
+
+    def handle(self, event):
+        """Handle user input."""
+        if event.type == pygame.MOUSEBUTTONUP:
+            return
+        x, y = event.pos
+        board_file = x // self.square_size
+        board_rank = y // self.square_size
+        self.square_to_move = (board_rank, board_file)

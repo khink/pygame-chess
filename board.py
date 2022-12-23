@@ -41,3 +41,13 @@ class Board:
             "K",
             "Q",
         ]
+
+    def get_valid_moves(self, board_rank, board_file):
+        index = board_rank * self.files + board_file
+        piece_code = self.squares[index]
+
+        # TODO add all other pieces, take board boundaries into account
+        if piece_code == "P":
+            return [(board_rank - 1, board_file)]
+
+        return []
