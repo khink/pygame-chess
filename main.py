@@ -7,7 +7,10 @@ from board_screen import BoardScreen
 
 
 pygame.init()
-board = Board(6, 5)
+
+board = Board("rnbkq/ppppp/5/5/PPPPP/RNBKQ")
+print(board)
+
 screen = pygame.display.set_mode(
     (
         BoardScreen.square_size * board.files,

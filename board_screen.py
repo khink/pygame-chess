@@ -113,3 +113,4 @@ class BoardScreen:
         board_file = x // self.square_size
         board_rank = y // self.square_size
         self.square_to_move = (board_rank, board_file)
+        print(self.board)
