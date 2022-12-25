@@ -1,4 +1,21 @@
+import os
+
 import pygame
+
+PIECE_NAME = {
+    "b": "dark_bishop",
+    "B": "light_bishop",
+    "r": "dark_rook",
+    "R": "light_rook",
+    "n": "dark_knight",
+    "N": "light_knight",
+    "k": "dark_king",
+    "K": "light_king",
+    "q": "dark_queen",
+    "Q": "light_queen",
+    "p": "dark_pawn",
+    "P": "light_queen",
+}
 
 
 class BoardScreen:
@@ -10,39 +27,26 @@ class BoardScreen:
     dark_square_color = 138, 120, 93
     light_square_color = 252, 204, 116
 
-    dark_bishop = pygame.image.load("images/b.png")
-    light_bishop = pygame.image.load("images/B.png")
-    dark_rook = pygame.image.load("images/r.png")
-    light_rook = pygame.image.load("images/R.png")
-    dark_knight = pygame.image.load("images/n.png")
-    light_knight = pygame.image.load("images/N.png")
-    dark_king = pygame.image.load("images/k.png")
-    light_king = pygame.image.load("images/K.png")
-    dark_queen = pygame.image.load("images/q.png")
-    light_queen = pygame.image.load("images/Q.png")
-    dark_pawn = pygame.image.load("images/p.png")
-    light_queen = pygame.image.load("images/P.png")
+    def _set_image_attrs(self):
+        _dir = os.path.dirname(__file__)
 
-    move_target_image = pygame.image.load("images/move-target.png")
+        setattr(
+            self,
+            "move_target_image",
+            pygame.image.load(f"{_dir}/images/move-target.png"),
+        )
+
+        for piece_code, piece_name in PIECE_NAME.items():
+            setattr(
+                self, piece_name, pygame.image.load(f"{_dir}/images/{piece_code}.png")
+            )
 
     def get_piece_image(self, piece_code):
-        piece_name = {
-            "b": "dark_bishop",
-            "B": "light_bishop",
-            "r": "dark_rook",
-            "R": "light_rook",
-            "n": "dark_knight",
-            "N": "light_knight",
-            "k": "dark_king",
-            "K": "light_king",
-            "q": "dark_queen",
-            "Q": "light_queen",
-            "p": "dark_pawn",
-            "P": "light_queen",
-        }[piece_code]
+        piece_name = PIECE_NAME[piece_code]
         return getattr(self, piece_name)
 
     def __init__(self, board, screen):
+        self._set_image_attrs()
         self.board = board
         self.screen = screen
         self.square_to_move = None

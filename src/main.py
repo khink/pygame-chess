@@ -2,13 +2,12 @@ import sys
 
 import pygame
 
-from board import Board
-from board_screen import BoardScreen
-
+from board import FlexibleBoard
+from screen import BoardScreen
 
 pygame.init()
 
-board = Board("rnbkq/ppppp/5/5/PPPPP/RNBKQ")
+board = FlexibleBoard("rnbkq/ppppp/5/5/PPPPP/RNBKQ")
 print(board)
 
 screen = pygame.display.set_mode(
