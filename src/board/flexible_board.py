@@ -57,12 +57,17 @@ class FlexibleBoard:
 
         return "".join(builder)
 
-    def get_valid_moves(self, board_rank, board_file):
-        index = board_rank * self.files + board_file
-        piece_code = self.squares[index]
+    def push(self, move):
+        print(move)
+        piece_code = self.squares[move.from_square]
+        self.squares[move.to_square] = piece_code
+        self.squares[move.from_square] = None
 
-        # TODO add all other pieces, take board boundaries into account
-        if piece_code == "P":
-            return [(board_rank - 1, board_file)]
 
-        return []
+class Move:
+    def __init__(self, from_square, to_square):
+        self.from_square = from_square
+        self.to_square = to_square
+
+    def __str__(self):
+        return f"{self.from_square} to {self.to_square}"

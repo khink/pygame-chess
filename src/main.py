@@ -25,7 +25,9 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
 
-        if event.type in [pygame.MOUSEBUTTONUP, pygame.MOUSEBUTTONDOWN]:
+        if event.type in [
+            pygame.MOUSEBUTTONUP,
+            pygame.MOUSEBUTTONDOWN,
+            pygame.MOUSEMOTION,
+        ]:
             board_screen.handle(event)
-
-        board_screen.render()

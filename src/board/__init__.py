@@ -1,1 +1,1 @@
-from .flexible_board import FlexibleBoard
+from .flexible_board import FlexibleBoard, Move
