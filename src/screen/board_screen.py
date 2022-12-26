@@ -57,6 +57,7 @@ class BoardScreen:
         self.draw_board()
         self.draw_pieces()
         self.draw_picked_up_piece()
+        self.draw_possible_moves()
         pygame.display.flip()
 
     def draw_board(self):
@@ -122,6 +123,29 @@ class BoardScreen:
 
         self.screen.blit(piece_image, move_piece_rect)
 
+    @property
+    def legal_moves(self):
+        if not hasattr(self, "_legal_moves"):
+            self._legal_moves = self.board.generate_pseudo_legal_moves(self.square_from)
+        return self._legal_moves
+
+    def draw_possible_moves(self):
+        """Draw the possible moves on the board if a piece was selected."""
+        if not self.square_from:
+            return
+
+        for legal_square in self.legal_moves:
+
+            # calculate rank and file
+            file_index = legal_square % self.board.files
+            rank_index = legal_square // self.board.files
+
+            move_target_rect = self.move_target_image.get_rect().move(
+                file_index * self.square_size,
+                rank_index * self.square_size,
+            )
+            self.screen.blit(self.move_target_image, move_target_rect)
+
     def handle(self, event):
         """Handle user input."""
         x, y = event.pos
@@ -139,7 +163,9 @@ class BoardScreen:
             else:
                 move = Move(self.square_from, square)
                 self.board.push(move)
+
             self.square_from = None
+            del self._legal_moves
 
         elif event.type == pygame.MOUSEMOTION:
             self.pos = event.pos

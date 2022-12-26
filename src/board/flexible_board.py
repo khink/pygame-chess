@@ -1,3 +1,9 @@
+def is_opposite_color(piece_code_one, piece_code_two):
+    if piece_code_one.isupper():
+        return piece_code_two.islower()
+    return piece_code_two.isupper()
+
+
 class FlexibleBoard:
     """A chess board with flexible dimensions.
 
@@ -62,6 +68,42 @@ class FlexibleBoard:
         piece_code = self.squares[move.from_square]
         self.squares[move.to_square] = piece_code
         self.squares[move.from_square] = None
+
+    def generate_pseudo_legal_moves(self, square):
+        """Legal moves that might not move the king out of check."""
+
+        piece_code = self.squares[square]
+        if not piece_code:
+            return []
+
+        squares = []
+
+        if piece_code in ["P", "p"]:
+            if piece_code == "p":
+                forward_square = square - self.files
+            else:
+                forward_square = square - self.files
+
+            if (
+                forward_square in range(len(self.squares))
+                and not self.squares[forward_square]
+            ):
+                squares.append(forward_square)
+
+            for offset in [-1, 1]:
+                capture_square = forward_square + offset
+                try:
+                    occupying_piece_code = self.squares[capture_square]
+                    if occupying_piece_code and is_opposite_color(
+                        occupying_piece_code, piece_code
+                    ):
+                        squares.append(capture_square)
+                except IndexError:
+                    # pawn at edge of board
+                    pass
+
+        print(f"Calculated legal moves: {squares=}")
+        return squares
 
 
 class Move:
